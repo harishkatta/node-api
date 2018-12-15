@@ -49,7 +49,8 @@ app.get('/todos/:id',(req,res) => {
     if(matchedTodo.length > 0){
         res.json(matchedTodo);
     } else {
-        res.status(404).send();
+        //res.status(404).send({"Error":"No Todo Item with this Id"});
+        res.status(404).json({"Error":"No Todo Item with this Id"});
     }
 });
 
@@ -60,7 +61,8 @@ app.post('/todos', (req,res) =>{
     let body = req.body;
     body.id = finalTodoId+1;
     todos.push(body);
-    res.json(body);
+    res.status(200).send({"Success":"ToDo Item posted Succesfully"});
+    //res.status(200).json({"Success":"ToDo Item posted Succesfully"});
 });
 
 //Delete
@@ -70,10 +72,10 @@ app.delete('/todos/:id', (req, res) => {
     let index=todos.findIndex((todo) => todo.id === deletedId);
     if(index !== -1){
         todos.splice(index,1);
-        res.status(204);
-        //res.json(todos);
+        res.status(204).send();
+
     } else {
-        res.status(404).json({"Error:":"no Todo found with that Id"});
+        res.status(404).json({"Error:":"No Todo Item found with this Id"});
     }
 });
 
@@ -83,8 +85,6 @@ app.put('/todos/:id', (req,res) =>{
     let body=req.body;
     let putId = parseInt(req.params.id);
     let index=todos.findIndex((todo) => todo.id === putId);
-    console.log(index);
-    console.log(body);
 
     if(index !== -1 /*&& body.hasOwnProperty('completed') && body.hasOwnProperty('description')*/){
         todos[index].description=body.description;
