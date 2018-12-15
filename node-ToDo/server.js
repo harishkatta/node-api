@@ -53,7 +53,7 @@ app.get('/todos/:id',(req,res) => {
     }
 });
 
-//POST addtodo
+//POST /todos
 
 app.post('/todos', (req,res) =>{
 
@@ -63,7 +63,9 @@ app.post('/todos', (req,res) =>{
     res.json(body);
 });
 
-app.delete('/todos/:id', (req, res) =>{
+//Delete
+
+app.delete('/todos/:id', (req, res) => {
     let deletedId = parseInt(req.params.id);
     let index=todos.findIndex((todo) => todo.id === deletedId);
     if(index !== -1){
