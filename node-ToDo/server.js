@@ -1,11 +1,11 @@
-var express = require('express');
-var bodyParser = require('body-parser');
+let express = require('express');
+let bodyParser = require('body-parser');
 
-var app=express();
+let app=express();
 
-var port=3000;
+let port=3000;
 
-    var todos=[
+    let todos=[
         {
             id:1,
             description:'Meet Me for lunch',
@@ -57,7 +57,7 @@ app.get('/todos/:id',(req,res) => {
 
 app.post('/todos', (req,res) =>{
 
-    var body = req.body;
+    let body = req.body;
     body.id = finalTodoId+1;
     todos.push(body);
     res.json(body);
@@ -70,10 +70,29 @@ app.delete('/todos/:id', (req, res) => {
     let index=todos.findIndex((todo) => todo.id === deletedId);
     if(index !== -1){
         todos.splice(index,1);
-        res.json(todos);
+        res.status(204);
+        //res.json(todos);
     } else {
         res.status(404).json({"Error:":"no Todo found with that Id"});
     }
 });
+
+//Put
+app.put('/todos/:id', (req,res) =>{
+
+    let body=req.body;
+    let putId = parseInt(req.params.id);
+    let index=todos.findIndex((todo) => todo.id === putId);
+    console.log(index);
+    console.log(body);
+
+    if(index !== -1 /*&& body.hasOwnProperty('completed') && body.hasOwnProperty('description')*/){
+        todos[index].description=body.description;
+        todos[index].completed=body.completed;
+        res.json(todos[index]);
+    } else {
+        res.status(404).json({"Error:":"no Todo found with that Id"})
+    }
+})
 
 app.listen(3000,()=> console.log(`app listen to ${port}`));
